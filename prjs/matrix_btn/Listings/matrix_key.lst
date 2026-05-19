@@ -1,0 +1,59 @@
+C51 COMPILER V9.57.0.0   MATRIX_KEY                                                        05/14/2026 14:58:25 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MATRIX_KEY
+OBJECT MODULE PLACED IN .\Objects\matrix_key.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE matrix_key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\matrix_key.lst) TABS(2) OBJECT(.\Objects\matrix_key.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          unsigned char Matrix_Key() {
+   4   1        unsigned char key_number = 0;
+   5   1        // 数码管扫描
+   6   1        P1 = 0xFF;
+   7   1        P1_3 = 0; // 第一列
+   8   1        if (P1_7 == 0) {Delay(20); while(P1_7 == 0); key_number = 1;};
+   9   1        if (P1_6 == 0) {Delay(20); while(P1_6 == 0); key_number = 5;};
+  10   1        if (P1_5 == 0) {Delay(20); while(P1_5 == 0); key_number = 9;};
+  11   1        if (P1_4 == 0) {Delay(20); while(P1_4 == 0); key_number = 13;};
+  12   1        
+  13   1        P1 = 0xFF;
+  14   1        P1_2 = 0; // 第二列
+  15   1        if (P1_7 == 0) {Delay(20); while(P1_7 == 0); key_number = 2;};
+  16   1        if (P1_6 == 0) {Delay(20); while(P1_6 == 0); key_number = 6;};
+  17   1        if (P1_5 == 0) {Delay(20); while(P1_5 == 0); key_number = 10;};
+  18   1        if (P1_4 == 0) {Delay(20); while(P1_4 == 0); key_number = 14;};
+  19   1        
+  20   1        P1 = 0xFF;
+  21   1        P1_1 = 0; // 第三列
+  22   1        if (P1_7 == 0) {Delay(20); while(P1_7 == 0); key_number = 3;};
+  23   1        if (P1_6 == 0) {Delay(20); while(P1_6 == 0); key_number = 7;};
+  24   1        if (P1_5 == 0) {Delay(20); while(P1_5 == 0); key_number = 11;};
+  25   1        if (P1_4 == 0) {Delay(20); while(P1_4 == 0); key_number = 15;};
+  26   1        
+  27   1        P1 = 0xFF;
+  28   1        P1_0 = 0; // 第四列
+  29   1        if (P1_7 == 0) {Delay(20); while(P1_7 == 0); key_number = 4;};
+  30   1        if (P1_6 == 0) {Delay(20); while(P1_6 == 0); key_number = 8;};
+  31   1        if (P1_5 == 0) {Delay(20); while(P1_5 == 0); key_number = 12;};
+  32   1        if (P1_4 == 0) {Delay(20); while(P1_4 == 0); key_number = 16;};
+  33   1        
+  34   1        return key_number;
+  35   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    281    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

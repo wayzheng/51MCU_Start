@@ -1,0 +1,179 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    05/15/2026  14:07:28  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\Delay.obj, .\Objects\Timer0.obj TO .\Objects\uart PRINT (.\Lis
+>> tings\uart.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\Delay.obj (DELAY)
+  .\Objects\Timer0.obj (TIMER0)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  .\Objects\uart (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?MAIN
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0027H     UNIT         ?PR?UART_INIT?MAIN
+            CODE    002AH     0017H     UNIT         ?PR?TIMER0_INIT?TIMER0
+            CODE    0041H     0015H     UNIT         ?PR?_DELAY?DELAY
+            CODE    0056H     0013H     UNIT         ?PR?MAIN?MAIN
+            CODE    0069H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0075H     0008H     UNIT         ?PR?_UART_SENDBYTE?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\uart (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+?PR?MAIN?MAIN
+  +--> ?PR?UART_INIT?MAIN
+  +--> ?PR?_UART_SENDBYTE?MAIN
+  +--> ?PR?_DELAY?DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\uart (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/15/2026  14:07:28  PAGE 2
+
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00A8H.7       PUBLIC        EA
+  D:0008H         PUBLIC        Sec
+  B:0098H.1       PUBLIC        TI
+  C:0056H         PUBLIC        main
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  C:0003H         PUBLIC        UART_Init
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  C:0075H         PUBLIC        _UART_SendByte
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+  D:008AH         PUBLIC        TL0
+  D:008BH         PUBLIC        TL1
+  B:00B8H.1       PUBLIC        PT0
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  -------         PROC          UART_INIT
+  C:0003H         LINE#         24
+  C:0003H         LINE#         25
+  C:0006H         LINE#         26
+  C:0009H         LINE#         30
+  C:000CH         LINE#         31
+  C:000FH         LINE#         34
+  C:0011H         LINE#         35
+  C:0013H         LINE#         36
+  C:0016H         LINE#         37
+  C:0019H         LINE#         38
+  C:001CH         LINE#         39
+  C:001FH         LINE#         40
+  C:0021H         LINE#         41
+  C:0023H         LINE#         42
+  C:0025H         LINE#         43
+  C:0027H         LINE#         44
+  C:0029H         LINE#         45
+  -------         ENDPROC       UART_INIT
+  -------         PROC          _UART_SENDBYTE
+  D:0007H         SYMBOL        Byte
+  C:0075H         LINE#         46
+  C:0075H         LINE#         47
+  C:0077H         LINE#         48
+  C:007AH         LINE#         49
+  C:007CH         LINE#         51
+  -------         ENDPROC       _UART_SENDBYTE
+  -------         PROC          MAIN
+  C:0056H         LINE#         52
+  C:0056H         LINE#         53
+  C:0059H         LINE#         55
+  C:0059H         LINE#         56
+  C:005EH         LINE#         57
+  C:0060H         LINE#         58
+  C:0067H         LINE#         59
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  05/15/2026  14:07:28  PAGE 3
+
+
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0041H         PUBLIC        _Delay
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0041H         LINE#         1
+  C:0041H         LINE#         4
+  C:004BH         LINE#         5
+  C:004DH         LINE#         6
+  C:004FH         LINE#         8
+  C:004FH         LINE#         9
+  C:0051H         LINE#         10
+  C:0053H         LINE#         11
+  C:0055H         LINE#         12
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        DELAY
+
+  -------         MODULE        TIMER0
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00A8H.7       PUBLIC        EA
+  C:002AH         PUBLIC        Timer0_Init
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.1       PUBLIC        ET0
+  B:0088H.5       PUBLIC        TF0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:00B8H.1       PUBLIC        PT0
+  B:0088H.4       PUBLIC        TR0
+  -------         PROC          TIMER0_INIT
+  C:002AH         LINE#         7
+  C:002AH         LINE#         10
+  C:002DH         LINE#         11
+  C:0030H         LINE#         14
+  C:0032H         LINE#         15
+  C:0034H         LINE#         16
+  C:0037H         LINE#         17
+  C:003AH         LINE#         19
+  C:003CH         LINE#         20
+  C:003EH         LINE#         21
+  C:0040H         LINE#         22
+  -------         ENDPROC       TIMER0_INIT
+  -------         ENDMOD        TIMER0
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0_INIT?TIMER0
+
+Program Size: data=10.0 xdata=0 code=125
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

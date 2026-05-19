@@ -1,0 +1,63 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/14/2026 21:32:12 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "Timer0.h" 
+   2          #include <REGX52.H>
+   3          #include "Key.h"
+   4          #include <INTRINS.H>
+   5          
+   6          unsigned char KeyNum;
+   7          unsigned char LEDMode;
+   8          
+   9          void main() {
+  10   1        P2 = 0xFE; // 使得最低位0 点亮最低位
+  11   1        Timer0_Init();
+*** WARNING C206 IN LINE 11 OF main.c: 'Timer0_Init': missing function-prototype
+  12   1        while(1) {
+  13   2          KeyNum = key();
+  14   2          if (KeyNum) {
+  15   3            if (KeyNum == 1) {
+  16   4              LEDMode++;
+  17   4              if (LEDMode >= 2) LEDMode = 0;
+  18   4            }
+  19   3          }
+  20   2        }
+  21   1      }
+  22          
+  23          
+  24          void Timer0_Routine() interrupt 1{
+  25   1        static unsigned int T0Count = 0; // 保证退出函数的时候不丢失数据
+  26   1        TH0 = 64535 / 256; // 重新赋初始值
+  27   1        TH1 = 64535 % 256;
+  28   1        T0Count++;
+  29   1        if (T0Count >= 500) {
+  30   2          T0Count = 0;
+  31   2          if (LEDMode == 0) {
+  32   3            P2 = _crol_(P2, 1);
+  33   3          }
+  34   2          else if (LEDMode == 1) {
+  35   3            P2 = _cror_(P2, 1);
+  36   3          }
+  37   2        }
+  38   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    118    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

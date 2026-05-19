@@ -1,0 +1,57 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/15/2026 14:12:39 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Delay.h"
+   3          #include "Timer0.h"
+   4          #include "uart.h"
+   5          /**
+   6            *@brief
+   7            *@param
+   8            *@retvel
+   9            */
+  10          //void Uart1_Init(void) //4800bps@11.0592MHz
+  11          //{
+  12          //  PCON |= 0x80;
+  13          //  SCON = 0x50;    //8位数据,可变波特率
+  14          //  AUXR &= 0xBF;   //定时器时钟12T模式
+  15          //  AUXR &= 0xFE;   //串口1选择定时器1为波特率发生器
+  16          //  TMOD &= 0x0F;   //设置定时器模式
+  17          //  TMOD |= 0x20;   //设置定时器模式
+  18          //  TL1 = 0xF4;     //设置定时初始值
+  19          //  TH1 = 0xF4;     //设置定时重载值
+  20          //  ET1 = 0;      //禁止定时器中断
+  21          //  TR1 = 1;      //定时器1开始计时
+  22          //}
+  23          unsigned char Sec;
+  24          
+  25          void main() {
+  26   1        UART_Init();
+  27   1        
+  28   1        while(1) {
+  29   2          UART_SendByte(Sec);
+  30   2          Sec++;
+  31   2          Delay(1000);
+  32   2        }
+  33   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     19    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,73 @@
+C51 COMPILER V9.57.0.0   KEY                                                               05/17/2026 18:35:35 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\key.l
+                    -st) TABS(2) OBJECT(.\Objects\key.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          /**
+   4            *@brief 获取独立按键的键码
+   5            *@param 无
+   6            *@retvel 按下按键的键码 范围位0到4 无按键按下时返回零
+   7            */
+   8            
+   9          unsigned char Key_KeyNumber;
+  10          
+  11          unsigned char Key(void) { 
+  12   1        unsigned char Temp = 0;
+  13   1        Temp = Key_KeyNumber;
+  14   1        Key_KeyNumber = 0;
+  15   1        return Temp;
+  16   1      }
+  17          
+  18          unsigned char Key_GetState() { 
+  19   1        unsigned char KeyNumber = 0;
+  20   1        if(P3_1 ==0) {KeyNumber = 1;}
+  21   1        if(P3_0 ==0) {KeyNumber = 2;}
+  22   1        if(P3_2 ==0) {KeyNumber = 3;}
+  23   1        if(P3_3 ==0) {KeyNumber = 4;}
+  24   1        return KeyNumber;
+  25   1      }
+  26          
+  27          
+  28          void Key_Loop(void) {
+  29   1        static unsigned char NowState;
+  30   1        static unsigned char LastState;
+  31   1        LastState = NowState;
+  32   1        NowState = Key_GetState();
+  33   1        // 判断弹起的边缘
+  34   1        if (LastState == 1 && NowState == 0) {
+  35   2          Key_KeyNumber = 1;
+  36   2        }
+  37   1        if (LastState == 2 && NowState == 0) {
+  38   2          Key_KeyNumber = 2;
+  39   2        }
+  40   1        if (LastState == 3 && NowState == 0) {
+  41   2          Key_KeyNumber = 3;
+  42   2        }
+  43   1        if (LastState == 4 && NowState == 0) {
+  44   2          Key_KeyNumber = 4;
+  45   2        } 
+  46   1        
+  47   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     85    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.57.0.0   KEY                                                               05/17/2026 18:35:35 PAGE 2   
+
+   DATA SIZE        =      3    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

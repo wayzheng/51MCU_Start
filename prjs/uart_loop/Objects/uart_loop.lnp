@@ -1,0 +1,5 @@
+".\Objects\Delay.obj",
+".\Objects\uart.obj",
+".\Objects\main.obj" 
+TO ".\Objects\uart_loop" 
+PRINT(".\Listings\uart_loop.m51") RAMSIZE(256) 

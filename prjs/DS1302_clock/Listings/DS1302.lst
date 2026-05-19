@@ -1,0 +1,156 @@
+C51 COMPILER V9.57.0.0   DS1302                                                            05/16/2026 19:34:22 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE DS1302
+OBJECT MODULE PLACED IN .\Objects\DS1302.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE DS1302.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\DS
+                    -1302.lst) TABS(2) OBJECT(.\Objects\DS1302.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          sbit DS1302_SCLK = P3 ^ 6;
+   4          sbit DS1302_IO = P3 ^ 4;
+   5          sbit DS1302_CE = P3 ^ 5;
+   6          // 定义写地址
+   7          #define DS1302_SECOND 0x80
+   8          #define DS1302_MINUTE 0x82
+   9          #define DS1302_HOUR 0x84
+  10          #define DS1302_DATE 0x86
+  11          #define DS1302_MONTH 0x88
+  12          #define DS1302_DAY 0x8A
+  13          #define DS1302_YEAR 0x8C
+  14          
+  15          #define DS1302_Write_Protect 0x8E
+  16          
+  17          unsigned char DS1302_Time[] = {26, 5, 16, 17, 3, 30, 6};
+  18          
+  19          /**
+  20            *@brief 对变量进行初始化 
+  21            *@param 时钟信号 使能信号
+  22            *@retvel
+  23            */
+  24          void DS1302_Init(void) {
+  25   1        DS1302_CE = 0;
+  26   1        DS1302_SCLK = 0;
+  27   1      }
+  28          
+  29          /**
+  30            *@brief 写数据
+  31            *@param Command 给出指令以及位置，Data 给出写的数据
+  32            *@retvel
+  33            */
+  34          void DS1302_WriteByte(unsigned char Command, unsigned char Data) {
+  35   1        unsigned char i;
+  36   1        DS1302_CE = 1; 
+  37   1      //  DS1302_IO = Command & 0x01;
+  38   1      //  DS1302_SCLK = 1;
+  39   1      //  DS1302_SCLK = 0;
+  40   1      //  
+  41   1      //  DS1302_IO = Command & 0x02;
+  42   1      //  DS1302_SCLK = 1;
+  43   1      //  DS1302_SCLK = 0;
+  44   1      //  通过使用for循环来进行操作
+  45   1        for (i = 0; i < 8; i++) {
+  46   2          DS1302_IO = (Command & (0x01 << i)) ? 1 : 0;
+  47   2          DS1302_SCLK = 1;
+  48   2          DS1302_SCLK = 0;
+  49   2        }
+  50   1        
+  51   1        for (i = 0; i < 8; i++) {
+  52   2          DS1302_IO = Data & (0x01 << i);
+  53   2          DS1302_SCLK = 1;
+  54   2          DS1302_SCLK = 0;
+C51 COMPILER V9.57.0.0   DS1302                                                            05/16/2026 19:34:22 PAGE 2   
+
+  55   2        }
+  56   1        DS1302_CE = 0;
+  57   1      }
+  58          
+  59          /**
+  60            *@brief 对位置进行读取
+  61            *@param Command 给出指令
+  62            *@retvel 返回的是读取到的数据
+  63            */
+  64          unsigned char DS1302_ReadByte(unsigned char Command) {
+  65   1        unsigned char Data = 0x00; // 局部变量要进行初始化
+  66   1        unsigned char i;
+  67   1        Command |= 0x01;
+  68   1        DS1302_CE = 1;
+  69   1        for (i = 0; i < 8; i++) {
+  70   2          DS1302_IO = (Command & (0x01 << i)) ? 1 : 0;  
+  71   2          DS1302_SCLK = 0;
+  72   2          DS1302_SCLK = 1;
+  73   2        }
+  74   1      //    DS1302_SCLK = 0;
+  75   1      //    DS1302_SCLK = 1;
+  76   1      //    if (DS1302_IO) {
+  77   1      //      Data = Data | 0x01;
+  78   1      //    }
+  79   1      //    DS1302_SCLK = 0;
+  80   1      //    DS1302_SCLK = 1;
+  81   1      //    if (DS1302_IO) {
+  82   1      //      Data = Data | 0x01;
+  83   1      //    }
+  84   1        for (i = 0; i < 8; i++) {
+  85   2          DS1302_SCLK = 1;
+  86   2          DS1302_SCLK = 0;
+  87   2          if (DS1302_IO) {
+  88   3            Data = Data | (0x01 << i);
+  89   3          }
+  90   2        }
+  91   1        DS1302_CE = 0;
+  92   1        DS1302_IO = 0;
+  93   1        return Data;
+  94   1      }
+  95          
+  96          /**
+  97          *@brief 对DS1302_Time数组继续设置，将十进制转化为BCD码来进行写进去
+  98            *@param 无
+  99            *@retvel 无
+ 100            */
+ 101          void DS1302_SetTime(void) {
+ 102   1        // 关闭写保护机制
+ 103   1        DS1302_WriteByte(DS1302_Write_Protect, 0x00); 
+ 104   1        // 十进制转化为BCD码的格式
+ 105   1        DS1302_WriteByte(DS1302_YEAR, DS1302_Time[0] / 10 * 16 + DS1302_Time[0] % 10); 
+ 106   1        DS1302_WriteByte(DS1302_MONTH, DS1302_Time[1] / 10 * 16 + DS1302_Time[1] % 10);
+ 107   1        DS1302_WriteByte(DS1302_DATE, DS1302_Time[2] / 10 * 16 + DS1302_Time[2] % 10);
+ 108   1        DS1302_WriteByte(DS1302_HOUR, DS1302_Time[3] / 10 * 16 + DS1302_Time[3] % 10);
+ 109   1        DS1302_WriteByte(DS1302_MINUTE, DS1302_Time[4] / 10 * 16 + DS1302_Time[4] % 10);
+ 110   1        DS1302_WriteByte(DS1302_SECOND, DS1302_Time[5] / 10 * 16 + DS1302_Time[5] % 10);
+ 111   1        DS1302_WriteByte(DS1302_DAY, DS1302_Time[6] / 10 * 16 + DS1302_Time[6] % 10);
+ 112   1      }
+ 113          /**
+ 114            *@brief 读取时钟信号并对DS1202_Time来来进行更新
+ 115            *@param 无
+ 116            *@retvel
+C51 COMPILER V9.57.0.0   DS1302                                                            05/16/2026 19:34:22 PAGE 3   
+
+ 117            */
+ 118          void DS1302_ReadTime(void) {
+ 119   1        
+ 120   1        DS1302_Time[0] = DS1302_ReadByte(DS1302_YEAR) / 16 * 10 + DS1302_ReadByte(DS1302_YEAR) % 16;
+ 121   1        DS1302_Time[1] = DS1302_ReadByte(DS1302_MONTH) / 16 * 10 + DS1302_ReadByte(DS1302_MONTH) % 16;
+ 122   1        DS1302_Time[2] = DS1302_ReadByte(DS1302_DATE) / 16 * 10 + DS1302_ReadByte(DS1302_DATE) % 16;
+ 123   1        DS1302_Time[3] = DS1302_ReadByte(DS1302_HOUR) / 16 * 10 + DS1302_ReadByte(DS1302_HOUR) % 16;
+ 124   1        DS1302_Time[4] = DS1302_ReadByte(DS1302_MINUTE) / 16 * 10 + DS1302_ReadByte(DS1302_MINUTE) % 16;
+ 125   1        DS1302_Time[5] = DS1302_ReadByte(DS1302_SECOND) / 16 * 10 + DS1302_ReadByte(DS1302_SECOND) % 16;
+ 126   1        DS1302_Time[6] = DS1302_ReadByte(DS1302_DAY) / 16 * 10 + DS1302_ReadByte(DS1302_DAY) % 16;
+ 127   1        
+ 128   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    517    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

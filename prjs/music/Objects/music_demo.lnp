@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\Delay.obj",
+".\Objects\key.obj",
+".\Objects\Timer0.obj",
+".\Objects\Nixie.obj",
+".\Objects\Buzzer.obj" 
+TO ".\Objects\music_demo" 
+PRINT(".\Listings\music_demo.m51") RAMSIZE(256) 

@@ -1,0 +1,56 @@
+C51 COMPILER V9.57.0.0   AT24C02                                                           05/17/2026 16:18:57 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE AT24C02
+OBJECT MODULE PLACED IN .\Objects\AT24C02.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE AT24C02.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\A
+                    -T24C02.lst) TABS(2) OBJECT(.\Objects\AT24C02.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "I2C.h"
+   3          
+   4          #define AT24C02_ADDRESS 0xA0
+   5          
+   6          void AT24C02_WriteByte(unsigned char WordAddress, unsigned char Data) {
+   7   1        I2C_Start();
+   8   1        I2C_SendByte(AT24C02_ADDRESS);
+   9   1        I2C_ReceiveAck();
+  10   1        I2C_SendByte(WordAddress);
+  11   1        I2C_ReceiveAck();
+  12   1        I2C_SendByte(Data);
+  13   1        I2C_ReceiveAck();
+  14   1        I2C_Stop();
+  15   1      }
+  16          
+  17          unsigned char AT24C02_ReadByte(unsigned char WordAddress) {
+  18   1        unsigned char Data;
+  19   1        I2C_Start();
+  20   1        I2C_SendByte(AT24C02_ADDRESS);
+  21   1        I2C_ReceiveAck();
+  22   1        I2C_SendByte(WordAddress);
+  23   1        I2C_ReceiveAck();
+  24   1        I2C_Start();
+  25   1        I2C_SendByte(AT24C02_ADDRESS | 0x01); 
+  26   1        I2C_ReceiveAck();
+  27   1        Data = I2C_ReceiveByte();
+  28   1        I2C_SendAck(1);
+  29   1        I2C_Stop();
+  30   1        return Data;
+  31   1      }
+  32          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     82    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,39 @@
+C51 COMPILER V9.57.0.0   KEY                                                               05/17/2026 14:40:20 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\key.l
+                    -st) TABS(2) OBJECT(.\Objects\key.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          /**
+   4            *@brief 获取独立按键的键码
+   5            *@param 无
+   6            *@retvel 按下按键的键码 范围位0到4 无按键按下时返回零
+   7            */
+   8          unsigned char key() {
+   9   1        unsigned char KeyNumber = 0;
+  10   1        if(P3_1 ==0) {Delay(20); while(P3_1 == 0); Delay(20); KeyNumber = 1;}
+  11   1        if(P3_0 ==0) {Delay(20); while(P3_0 == 0); Delay(20); KeyNumber = 2;}
+  12   1        if(P3_2 ==0) {Delay(20); while(P3_2 == 0); Delay(20); KeyNumber = 3;}
+  13   1        if(P3_3 ==0) {Delay(20); while(P3_3 == 0); Delay(20); KeyNumber = 4;}
+  14   1        return KeyNumber;
+  15   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     97    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,58 @@
+C51 COMPILER V9.54   MAIN                                                                  05/13/2026 10:32:52 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          
+   3          // 按键的消抖方式
+   4          // 通过使用delay延时10ms来进行消抖
+   5          
+   6          void Delaymms(unsigned int m) //@11.0592MHz
+   7          {
+   8   1        unsigned char data i, j;
+   9   1        while (m) {
+  10   2          i = 2;
+  11   2          j = 199;
+  12   2          do
+  13   2          {
+  14   3            while (--j);
+  15   3          } while (--i);
+  16   2          m--;
+  17   2        }
+  18   1      }
+  19          
+  20          
+  21          void main() {
+  22   1          while (1) {
+  23   2              if (P3_1 == 0) {
+  24   3                Delaymms(20);
+  25   3                while(P3_1 == 0); // 如果按下按键 一直保持不动
+  26   3                Delaymms(20);
+  27   3                
+  28   3                P2_0 = ~P2_0;
+  29   3              }
+  30   2              else {
+  31   3                P2_0 = P2_0;
+  32   3              }
+  33   2          }
+  34   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     50    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

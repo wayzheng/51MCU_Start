@@ -1,0 +1,3 @@
+".\Objects\main.obj" 
+TO ".\Objects\seg_static" 
+PRINT(".\Listings\seg_static.m51") RAMSIZE(256) 

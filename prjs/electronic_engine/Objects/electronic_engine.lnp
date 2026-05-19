@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj" 
+TO ".\Objects\electronic_engine" 
+PRINT(".\Listings\electronic_engine.m51") RAMSIZE(256) 

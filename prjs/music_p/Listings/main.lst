@@ -1,0 +1,179 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/17/2026 10:05:15 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Timer0.h"
+   3          #include "Delay.h"
+   4          
+   5          #define SPEED 500
+   6          
+   7          // 获取Buzzer对应的位值并进行处理
+   8          sbit Buzzer = P2 ^ 5;
+   9          
+  10          unsigned int code FreqTable[36] = {
+  11              /* 中音区 */
+  12              63777, 63872, 63969, 64054, 64140, 64216,
+  13              64291, 64360, 64426, 64489, 64547, 64607,
+  14          
+  15              /* 高音区 */
+  16              64655, 64704, 64751, 64795, 64837, 64876,
+  17              64913, 64948, 64981, 65012, 65042, 65070,
+  18          
+  19              /* 倍高音区 */
+  20              65095, 65120, 65143, 65166, 65187, 65206,
+  21              65224, 65242, 65259, 65274, 65289, 65303
+  22          };
+  23          
+  24          #define R   255   // 休止符
+  25          
+  26          /* 中音区 */
+  27          #define M1  0     // 中音1 Do
+  28          #define M1S 1
+  29          #define M2  2     // 中音2 Re
+  30          #define M2S 3
+  31          #define M3  4     // 中音3 Mi
+  32          #define M4  5     // 中音4 Fa
+  33          #define M4S 6
+  34          #define M5  7     // 中音5 Sol
+  35          #define M5S 8
+  36          #define M6  9     // 中音6 La
+  37          #define M6S 10
+  38          #define M7  11    // 中音7 Si
+  39          
+  40          /* 高音区 */
+  41          #define H1  12
+  42          #define H1S 13
+  43          #define H2  14
+  44          #define H2S 15
+  45          #define H3  16
+  46          #define H4  17
+  47          #define H4S 18
+  48          #define H5  19
+  49          #define H5S 20
+  50          #define H6  21
+  51          #define H6S 22
+  52          #define H7  23
+  53          
+  54          /* 倍高音区 */
+C51 COMPILER V9.57.0.0   MAIN                                                              05/17/2026 10:05:15 PAGE 2   
+
+  55          #define HH1 24
+  56          #define HH2 26
+  57          #define HH3 28
+  58          #define HH4 29
+  59          #define HH5 31
+  60          #define HH6 33
+  61          #define HH7 35
+  62          
+  63          unsigned int ReloadValue;
+  64          
+  65          unsigned char Music_Twinkle_Note[] = {
+  66              M1, M1, M5, M5, M6, M6, M5,
+  67              M4, M4, M3, M3, M2, M2, M1,
+  68          
+  69              M5, M5, M4, M4, M3, M3, M2,
+  70              M5, M5, M4, M4, M3, M3, M2,
+  71          
+  72              M1, M1, M5, M5, M6, M6, M5,
+  73              M4, M4, M3, M3, M2, M2, M1
+  74          };
+  75          
+  76          unsigned char Music_Twinkle_Beat[] = {
+  77              1, 1, 1, 1, 1, 1, 2,
+  78              1, 1, 1, 1, 1, 1, 2,
+  79          
+  80              1, 1, 1, 1, 1, 1, 2,
+  81              1, 1, 1, 1, 1, 1, 2,
+  82          
+  83              1, 1, 1, 1, 1, 1, 2,
+  84              1, 1, 1, 1, 1, 1, 2
+  85          };
+  86          
+  87          /**
+  88            *@brief 设置对应音节的频率 利用定时起来进行产生
+  89            *@param 对应的音节0 到 35 还有一个 255表示停顿
+  90            *@retvel 无
+  91            */
+  92          
+  93          void Buzzer_SetNote(unsigned char note)
+  94          {
+  95   1          if (note == R)
+  96   1          {
+  97   2              TR0 = 0;
+  98   2              Buzzer = 0;
+  99   2              return;
+ 100   2          }
+ 101   1      
+ 102   1          ReloadValue = FreqTable[note];
+ 103   1      
+ 104   1          TH0 = ReloadValue >> 8;
+ 105   1          TL0 = ReloadValue & 0xFF;
+ 106   1      
+ 107   1          TR0 = 1; // 每演奏一次就将定时器进行关闭
+ 108   1      }
+ 109          /**
+ 110            *@brief 按照一定的时间来进行播放
+ 111            *@param 简谱的每一个音节组成的数组 简谱的每一个音播放的时间 简谱的整个的�
+             -�度
+ 112            *@retvel 无
+ 113            */
+ 114          
+ 115          void PlayMusic(unsigned char *note, unsigned char *beat, unsigned char len)
+C51 COMPILER V9.57.0.0   MAIN                                                              05/17/2026 10:05:15 PAGE 3   
+
+ 116          {
+ 117   1          unsigned char i;
+ 118   1      
+ 119   1          for (i = 0; i < len; i++)
+ 120   1          {
+ 121   2              Buzzer_SetNote(note[i]);
+ 122   2      
+ 123   2              Delay(beat[i] * SPEED);
+ 124   2      
+ 125   2              TR0 = 0;
+ 126   2              Buzzer = 0;
+ 127   2      
+ 128   2              Delay(100);
+ 129   2          }
+ 130   1      }
+ 131          /**
+ 132            *@brief 主函数 来进行音乐的播放
+ 133            *@param
+ 134            *@retvel
+ 135            */
+ 136          void main() {
+ 137   1        Timer0_Init(); // 定时器进行初始化
+ 138   1        while(1) {
+ 139   2          PlayMusic(Music_Twinkle_Note,Music_Twinkle_Beat,sizeof(Music_Twinkle_Note));
+ 140   2          Delay(2000);
+ 141   2        }
+ 142   1      }
+ 143          
+ 144          // 终端函数 产生对应的频率
+ 145          void Timer0_Routine(void) interrupt 1
+ 146          {
+ 147   1          TH0 = ReloadValue / 256;
+ 148   1          TL0 = ReloadValue % 256;
+ 149   1          Buzzer = !Buzzer; // 产生一个特定频率的之中
+ 150   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    166    ----
+   CONSTANT SIZE    =     72    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     86       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,113 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/19/2026 13:51:21 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          #include "key.h"
+   4          #include "Timer0.h"
+   5          #include "Nixie.h"
+   6          
+   7          sbit LED = P2 ^ 0;
+   8          //unsigned char Counter;
+   9          //unsigned char Compare;
+  10          //unsigned char KeyNum;
+  11          //unsigned char Speed;
+  12          
+  13          //void main() {
+  14          //  Timer0_Init();
+  15          //  Compare = 0;
+  16          //  while(1) {
+  17          //    KeyNum = Key();
+  18          //    if (KeyNum == 1) {
+  19          //      Speed++;
+  20          //      Speed %= 8;
+  21          //      if (Speed == 0) {Compare = 0;}
+  22          //      if (Speed == 1) {Compare = 10;}
+  23          //      if (Speed == 2) {Compare = 25;}
+  24          //      if (Speed == 3) {Compare = 40;}
+  25          //      if (Speed == 4) {Compare = 50;}
+  26          //      if (Speed == 5) {Compare = 75;}
+  27          //      if (Speed == 6) {Compare = 90;}
+  28          //      if (Speed == 7) {Compare = 100;}
+  29          //    }
+  30          //    if (KeyNum == 2) {
+  31          //      Speed = 0;
+  32          //      Compare = 0;
+  33          //    }
+  34          //    if (KeyNum == 3) {
+  35          //      if (Speed == 0) {Speed = 0;}
+  36          //      else {Speed--;}
+  37          //      if (Speed == 0) {Compare = 0;}
+  38          //      if (Speed == 1) {Compare = 10;}
+  39          //      if (Speed == 2) {Compare = 25;}
+  40          //      if (Speed == 3) {Compare = 40;}
+  41          //      if (Speed == 4) {Compare = 50;}
+  42          //      if (Speed == 5) {Compare = 75;}
+  43          //      if (Speed == 6) {Compare = 90;}
+  44          //      if (Speed == 7) {Compare = 100;}  
+  45          //    }
+  46          //    Nixie(1, Speed);
+  47          //  }
+  48          //  
+  49          //}
+  50          
+  51          unsigned char Counter, Compare;
+  52          unsigned char i;
+  53          
+  54          void main() {
+C51 COMPILER V9.57.0.0   MAIN                                                              05/19/2026 13:51:21 PAGE 2   
+
+  55   1        Timer0_Init();
+  56   1        while(1) {
+  57   2          for (i = 0; i < 100; i++) {
+  58   3            Compare = i;
+  59   3            Delay(10);
+  60   3          }
+  61   2          for (i = 100; i > 0; i--) {
+  62   3            Compare = i;
+  63   3            Delay(10);
+  64   3          }
+  65   2        }
+  66   1      }
+  67          
+  68          void Timer0_Routine() interrupt 1{
+  69   1        // static unsigned int T0Count = 0; // 保证退出函数的时候不丢失数据
+  70   1        static unsigned int Count0;
+  71   1        TL0 = 0xA4; // 重新赋初始值
+  72   1        TH0 = 0xFF;
+  73   1        Counter++;
+  74   1        Counter %= 100;
+  75   1        if (Counter < Compare) {
+  76   2          LED = 1;
+  77   2        }
+  78   1        else {
+  79   2          LED = 0;
+  80   2        }
+  81   1        Count0++;
+  82   1        if (Count0 >= 200) { // 每隔20ms对btn进行检测是否按下并进行更新值
+  83   2          Key_Loop();
+  84   2          Count0 = 0;
+  85   2        }
+  86   1        
+  87   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    161    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

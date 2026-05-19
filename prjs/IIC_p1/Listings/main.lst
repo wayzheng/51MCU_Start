@@ -1,0 +1,121 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/17/2026 19:53:58 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          #include "key.h"
+   4          #include "Nixie.h"
+   5          #include "Timer0.h"
+   6          #include "I2C.h"
+   7          #include "AT24C02.h"
+   8          
+   9          
+  10          unsigned char KeyNum;
+  11          unsigned char Temp;
+  12          unsigned char Minute, Second, MiniSecond;
+  13          bit RunFlag;
+  14          
+  15          void main() {
+  16   1        
+  17   1        Timer0_Init(); 
+  18   1        
+  19   1        while(1) {
+  20   2           KeyNum = Key();
+  21   2          
+  22   2          
+  23   2              if(KeyNum == 1) {
+  24   3                RunFlag = !RunFlag;
+  25   3              }
+  26   2              if(KeyNum == 2) {
+  27   3                Minute = 0;
+  28   3                MiniSecond = 0;
+  29   3                Second = 0;
+  30   3              }
+  31   2              if(KeyNum == 3) {
+  32   3                AT24C02_WriteByte(0, MiniSecond);
+  33   3                Delay(5);
+  34   3                AT24C02_WriteByte(1, Second);
+  35   3                Delay(5);
+  36   3                AT24C02_WriteByte(2, Minute);
+  37   3                Delay(5);
+  38   3              }
+  39   2              if(KeyNum == 4) {
+  40   3                MiniSecond = AT24C02_ReadByte(0);
+  41   3                Second = AT24C02_ReadByte(1);
+  42   3                Minute = AT24C02_ReadByte(2);
+  43   3              }
+  44   2                
+  45   2             Nixie_SetBuf(1, Minute / 10);
+  46   2             Nixie_SetBuf(2, Minute % 10);
+  47   2             Nixie_SetBuf(3, 11);
+  48   2             Nixie_SetBuf(4, Second / 10);
+  49   2             Nixie_SetBuf(5, Second % 10);
+  50   2             Nixie_SetBuf(6, 11);
+  51   2             Nixie_SetBuf(7, MiniSecond / 10);
+  52   2             Nixie_SetBuf(8, MiniSecond % 10);     
+  53   2        }
+  54   1      }
+C51 COMPILER V9.57.0.0   MAIN                                                              05/17/2026 19:53:58 PAGE 2   
+
+  55          
+  56          void Sec_Loop(void) {
+  57   1        if (RunFlag) {
+  58   2          MiniSecond++;
+  59   2          if (MiniSecond >= 100) {
+  60   3            MiniSecond = 0;
+  61   3            Second++;
+  62   3            if (Second >= 60) {
+  63   4              Minute++;
+  64   4              Second = 0;
+  65   4              if (Minute >= 60) {
+  66   5                Minute = 0;
+  67   5              }
+  68   4            }
+  69   3          }
+  70   2        };
+  71   1      }
+  72          
+  73          void Timer0_Routine() interrupt 1{
+  74   1        static unsigned int T0Count1 = 0; // 保证退出函数的时候不丢失数据
+  75   1        static unsigned int T0Count2 = 0;
+  76   1        static unsigned int T0Count3 = 0;
+  77   1        TH0 = 64535 / 256; // 重新赋初始值
+  78   1        TH1 = 64535 % 256;
+  79   1        T0Count1++;
+  80   1        if (T0Count1 >= 10) {
+  81   2          T0Count1 = 0;
+  82   2          Key_Loop();
+  83   2        }
+  84   1        T0Count2++;
+  85   1        if (T0Count2 >= 2) {
+  86   2          T0Count2 = 0;
+  87   2          Nixie_Loop();
+  88   2        }
+  89   1        T0Count3++;
+  90   1        if (T0Count3 >= 10) {
+  91   2          T0Count3 = 0;
+  92   2          Sec_Loop();
+  93   2        }
+  94   1          
+  95   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    370    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

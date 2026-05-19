@@ -1,0 +1,86 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/19/2026 18:56:34 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "delay.h"
+   3          #include "key.h"
+   4          #include "Timer1.h"
+   5          #include "Nixie.h"
+   6          #include "Timer0.h"
+   7          #include "IR.h"
+   8          #include "Int0.h"
+   9          #include "Motor.h"
+  10          
+  11          sbit Motor = P1 ^ 0;
+  12          extern unsigned char Counter;
+  13          extern unsigned char Compare;
+  14          unsigned char Command;
+  15          unsigned char Speed;
+  16          
+  17          void main() {
+  18   1        Motor_Init();
+  19   1        IR_Init();
+  20   1        Compare = 0;
+  21   1        while(1) {
+  22   2          if (IR_GetDataFlag()) {
+  23   3            Command = IR_GetCommand();
+  24   3            if (Command == IR_VOL_ADD) {
+  25   4              Speed++;
+  26   4              Speed %= 8;
+  27   4              if (Speed == 0) {Motor_SetSpeed(0);}
+  28   4              if (Speed == 1) {Motor_SetSpeed(10);}
+  29   4              if (Speed == 2) {Motor_SetSpeed(25);}
+  30   4              if (Speed == 3) {Motor_SetSpeed(40);}
+  31   4              if (Speed == 4) {Motor_SetSpeed(50);}
+  32   4              if (Speed == 5) {Motor_SetSpeed(75);}
+  33   4              if (Speed == 6) {Motor_SetSpeed(90);}
+  34   4              if (Speed == 7) {Motor_SetSpeed(100);}
+  35   4            }
+  36   3            else if (Command == IR_0) {
+  37   4              Speed = 0;
+  38   4              Compare = 0;
+  39   4            }
+  40   3            else if (Command == IR_VOL_MINUS) {
+  41   4              if (Speed == 0) {Speed = 0;}
+  42   4              else {Speed--;}
+  43   4              if (Speed == 0) {Motor_SetSpeed(0);}
+  44   4              if (Speed == 1) {Motor_SetSpeed(10);}
+  45   4              if (Speed == 2) {Motor_SetSpeed(25);}
+  46   4              if (Speed == 3) {Motor_SetSpeed(40);}
+  47   4              if (Speed == 4) {Motor_SetSpeed(50);}
+  48   4              if (Speed == 5) {Motor_SetSpeed(75);}
+  49   4              if (Speed == 6) {Motor_SetSpeed(90);}
+  50   4              if (Speed == 7) {Motor_SetSpeed(100);}
+  51   4            }
+  52   3            else if (Command == IR_4) {
+  53   4              Speed = 4;
+  54   4              Motor_SetSpeed(75);
+C51 COMPILER V9.57.0.0   MAIN                                                              05/19/2026 18:56:34 PAGE 2   
+
+  55   4            }
+  56   3          }
+  57   2          Nixie(1, Speed);
+  58   2        }
+  59   1        
+  60   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    241    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,84 @@
+C51 COMPILER V9.57.0.0   ISLEAPYEAR                                                        05/16/2026 19:34:22 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE ISLEAPYEAR
+OBJECT MODULE PLACED IN .\Objects\IsLeapYear.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE IsLeapYear.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\IsLeapYear.lst) TABS(2) OBJECT(.\Objects\IsLeapYear.obj)
+
+line level    source
+
+   1          /**
+   2            *@brief 判断是否是闰年
+   3            *@param 年份
+   4            *@retvel 返回是否是闰年的判断结果 1 表示是 0 表示不是
+   5            */
+   6          unsigned char IsLeapYear(unsigned char year)
+   7          {
+   8   1          unsigned int y;
+   9   1      
+  10   1          y = 2000 + year;   // 例如 DS1302_Time[0] = 24 表示 2024 年
+  11   1      
+  12   1          if ((y % 4 == 0 && y % 100 != 0) || (y % 400 == 0))
+  13   1          {
+  14   2              return 1;
+  15   2          }
+  16   1          else
+  17   1          {
+  18   2              return 0;
+  19   2          }
+  20   1      }
+  21          /**
+  22            *@brief 获取当前年当前月的最大天数
+  23            *@param 年份 月份
+  24            *@retvel 天数 闰年2月返回29 非闰年2月返回28
+  25            */
+  26          unsigned char GetMonthDays(unsigned char year, unsigned char month)
+  27          {
+  28   1          switch (month)
+  29   1          {
+  30   2              case 1:
+  31   2              case 3:
+  32   2              case 5:
+  33   2              case 7:
+  34   2              case 8:
+  35   2              case 10:
+  36   2              case 12:
+  37   2                  return 31;
+  38   2      
+  39   2              case 4:
+  40   2              case 6:
+  41   2              case 9:
+  42   2              case 11:
+  43   2                  return 30;
+  44   2      
+  45   2              case 2:
+  46   2                  if (IsLeapYear(year))
+  47   2                  {
+  48   3                      return 29;
+  49   3                  }
+  50   2                  else
+  51   2                  {
+  52   3                      return 28;
+  53   3                  }
+  54   2      
+C51 COMPILER V9.57.0.0   ISLEAPYEAR                                                        05/16/2026 19:34:22 PAGE 2   
+
+  55   2              default:
+  56   2                  return 31;
+  57   2          }
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    126    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

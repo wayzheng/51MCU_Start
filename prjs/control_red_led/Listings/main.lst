@@ -1,0 +1,65 @@
+C51 COMPILER V9.57.0.0   MAIN                                                              05/19/2026 18:00:51 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "Delay.h"
+   4          #include "Timer0.h"
+   5          #include "Int0.h"
+   6          #include "IR.h"
+   7          
+   8          unsigned char Num;
+   9          unsigned int Time;
+  10          unsigned int Address;
+  11          unsigned int Command;
+  12          
+  13          void main() {
+  14   1        LCD_Init();
+  15   1      //  LCD_ShowString(1, 1, "A");
+  16   1        LCD_ShowString(1, 1, "ADDR  CMD  NUM");
+  17   1        LCD_ShowString(2, 1, "00    00   000");
+  18   1        IR_Init();
+  19   1        while(1) {
+  20   2          if(IR_GetDataFlag() || IR_GetRepeatFlag()) {
+  21   3            Address = IR_GetAddress();
+  22   3            Command = IR_GetCommand();
+  23   3            
+  24   3            LCD_ShowHexNum(2, 1, Address, 2);
+  25   3            LCD_ShowHexNum(2, 7, Command, 2);
+  26   3            
+  27   3            if (Command == IR_VOL_MINUS) {
+  28   4              Num--;
+  29   4            }
+  30   3            if (Command == IR_VOL_ADD) {
+  31   4              Num++;
+  32   4            }
+  33   3            LCD_ShowNum(2, 12, Num, 3);
+  34   3          }
+  35   2        }
+  36   1      }
+  37          //// 下降沿就是会触发外部中断，通过按键来产生下降沿 通过实验现象也可以看�
+             -��按钮按下并松手会产生多个下降沿，从而达到多个++
+  38          //void Int0_Routine(void) interrupt 0 {
+  39          //  Num--;
+  40          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    125    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

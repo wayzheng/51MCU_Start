@@ -1,0 +1,7 @@
+".\Objects\main.obj",
+".\Objects\delay.obj",
+".\Objects\key.obj",
+".\Objects\Timer0.obj",
+".\Objects\Nixie.obj" 
+TO ".\Objects\electronic_motor" 
+PRINT(".\Listings\electronic_motor.m51") RAMSIZE(256) 

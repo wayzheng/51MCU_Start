@@ -1,0 +1,59 @@
+C51 COMPILER V9.57.0.0   MOTOR                                                             05/19/2026 18:54:15 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MOTOR
+OBJECT MODULE PLACED IN .\Objects\Motor.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Motor.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\Mot
+                    -or.lst) TABS(2) OBJECT(.\Objects\Motor.obj)
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Timer1.h"
+   3          #include "key.h"
+   4          
+   5          sbit Motor = P1 ^ 0;
+   6          
+   7          unsigned char Counter, Compare;
+   8          
+   9          void Motor_Init(void) {
+  10   1        Timer1_Init();
+  11   1      }
+  12          
+  13          void Motor_SetSpeed(unsigned char Speed) {
+  14   1        Compare = Speed;
+  15   1      }
+  16          
+  17          void Timer1_Routine() interrupt 3{
+  18   1        // static unsigned int T0Count = 0; // 保证退出函数的时候不丢失数据
+  19   1        static unsigned int Count0;
+  20   1        TL1 = 0xA4; // 重新赋初始值
+  21   1        TH1 = 0xFF;
+  22   1        Counter++;
+  23   1        Counter %= 100;
+  24   1        if (Counter < Compare) {
+  25   2          Motor = 1;
+  26   2        }
+  27   1        else {
+  28   2          Motor = 0;
+  29   2        }
+  30   1        Count0++;
+  31   1        if (Count0 >= 200) { // 每隔20ms对btn进行检测是否按下并进行更新值
+  32   2          Key_Loop();
+  33   2          Count0 = 0;
+  34   2        }
+  35   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    118    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

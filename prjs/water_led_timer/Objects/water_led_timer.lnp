@@ -1,0 +1,6 @@
+".\Objects\main.obj",
+".\Objects\Timer0.obj",
+".\Objects\key.obj",
+".\Objects\Delay.obj" 
+TO ".\Objects\water_led_timer" 
+PRINT(".\Listings\water_led_timer.m51") RAMSIZE(256) 
